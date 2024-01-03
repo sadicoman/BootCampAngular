@@ -1,0 +1,68 @@
+<h2>Gestion d'une animalerie</h2>
+<section>
+  <h3>Ajouter un Animal</h3>
+  <form (ngSubmit)="onAddAnimal(form.value)" #form="ngForm">
+    <input type="text" ngModel name="nom" placeholder="Nom" required />
+    <input type="number" ngModel name="age" placeholder="Âge" required />
+    <select ngModel name="parents">
+      <!-- Option pour ne pas sélectionner de parent -->
+      <option value="">Pas de parents</option>
+      <!-- Options pour les parents existants -->
+      <option *ngFor="let parent of animals" [value]="parent.nom">
+        {{ parent.nom }}
+      </option>
+    </select>
+    <!-- <input type="text" ngModel name="race" placeholder="Race" required /> -->
+    <select [(ngModel)]="selectedRace" (change)="onRaceChange()" name="race">
+      <option value="">Sélectionnez la race</option>
+      <option value="Chien">Chien</option>
+      <option value="Chat">Chat</option>
+      <option value="Hamster">Hamster</option>
+      <option value="Ornithorynque">Ornithorynque</option>
+      <option value="autre">Autre...</option>
+    </select>
+
+    <input
+      type="text"
+      [(ngModel)]="customRace"
+      *ngIf="isOtherSelected"
+      name="customRace"
+      placeholder="Entrez la race"
+    />
+
+    <select ngModel name="sexe" required>
+      <option value="">Sélectionnez le sexe</option>
+      <option value="Mâle">Mâle</option>
+      <option value="Femelle">Femelle</option>
+      <option value="Autre">Autre</option>
+    </select>
+    <!-- <input type="color" ngModel name="couleur" placeholder="Couleur" required /> -->
+    <input type="text" ngModel name="couleur" placeholder="Couleur" required />
+    <button type="submit">Ajouter</button>
+  </form>
+</section>
+<section class="animal-list">
+  <h2>Liste des Animaux</h2>
+  <ul>
+    <li *ngFor="let animal of animals" (click)="onSelectAnimal(animal.nom)">
+      {{ animal.nom }} ({{ animal.race }})
+    </li>
+  </ul>
+</section>
+
+<section class="animal-details" *ngIf="selectedAnimal">
+  <h2>Détails de l'Animal</h2>
+  <p><strong>Nom :</strong> {{ selectedAnimal.nom }}</p>
+  <p><strong>Âge :</strong> {{ selectedAnimal.age }}</p>
+  <p><strong>Race :</strong> {{ selectedAnimal.race }}</p>
+  <p><strong>Sexe :</strong> {{ selectedAnimal.sexe }}</p>
+  <p><strong>Couleur :</strong> {{ selectedAnimal.couleur }}</p>
+  <p>
+    <strong>Parents :</strong>
+    {{
+      selectedAnimal.parents && selectedAnimal.parents.length > 0
+        ? (selectedAnimal.parents | json)
+        : "Aucun"
+    }}
+  </p>
+</section>
